@@ -1,5 +1,13 @@
 data Lambda = Var Int | Abs Lambda | App Lambda Lambda
-    deriving (Show, Eq)
+    deriving (Eq)
+
+instance Show Lambda where
+    show (Var a) = show a
+    show (Abs a) = "λ " ++ show a
+    show (App a b) = case a of (App _ _) -> show a ++ " " ++ show' b
+                               _ -> show' a ++ " " ++ show' b
+        where show' l = case l of c@(Var _) -> show c
+                                  c -> "(" ++ show c ++ ")"
 
 reduct :: Lambda -> Lambda
 reduct (App (Abs a) b) = substitute a 1 b
