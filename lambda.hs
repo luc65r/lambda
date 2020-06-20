@@ -6,7 +6,7 @@ data Lambda = Var Int | Abs Lambda | App Lambda Lambda
 
 instance Show Lambda where
     showsPrec _ (Var n) = shows n
-    showsPrec n (Abs a) = showParen (n > 10) $ showString "λ " . shows a
+    showsPrec n (Abs a) = showParen (n > 9) $ showString "λ " . showsPrec 9 a
     showsPrec n (App a b) = showParen (n > 10) $ showsPrec 10 a . showString " " . showsPrec 11 b
 
 newtype Parser a = P { unP :: String -> (String, Maybe a) }
