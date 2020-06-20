@@ -149,3 +149,9 @@ lambdaToInt (Abs (Abs a)) = depth a
                               App (Var 2) b -> fmap (+ 1) $ depth b
                               _ -> Nothing
 lambdaToInt _ = Nothing
+
+main = putStrLn $ show $ do
+    y <- parse "λ (λ 2 (1 1)) (λ 2 (1 1))"
+    h <- reductMax <$> parse "λλ ((λ 1 (λ (λλ 1)) (λλ 2)) 1) (λλ 2 1) ((λλλ 3 (2 1)) 1 (2 ((λλλ 3 (λλ 1 (2 4)) (λ 2) (λ 1)) 1)))"
+    n <- intToLambda 5
+    lambdaToInt $ reductMax $ App (App y h) n
