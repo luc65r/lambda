@@ -1,5 +1,7 @@
 import Control.Applicative
+import Control.Monad (unless)
 import Data.Char
+import System.IO
 
 data Lambda = Var Int | Abs Lambda | App Lambda Lambda
     deriving (Eq, Read)
@@ -150,8 +152,11 @@ lambdaToInt (Abs (Abs a)) = depth a
                               _ -> Nothing
 lambdaToInt _ = Nothing
 
-main = putStrLn $ show $ do
-    y <- parse "λ (λ 2 (1 1)) (λ 2 (1 1))"
-    h <- reductMax <$> parse "λλ ((λ 1 (λ (λλ 1)) (λλ 2)) 1) (λλ 2 1) ((λλλ 3 (2 1)) 1 (2 ((λλλ 3 (λλ 1 (2 4)) (λ 2) (λ 1)) 1)))"
-    n <- intToLambda 5
-    lambdaToInt $ reductMax $ App (App y h) n
+
+main :: IO ()
+main = do
+    input <- putStr "λ> " >> hFlush stdout >> getLine
+    unless (input == ":q") $
+        putStrLn (case reductMax <$> parse input of
+                    Just s -> show s
+                    Nothing -> "Invalid input") >> main
