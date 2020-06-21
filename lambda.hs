@@ -1,6 +1,6 @@
 import Control.Applicative
 import Control.Monad (unless)
-import Data.Char
+import Data.Char (isDigit)
 import System.IO
 
 data Lambda = Var Int | Abs Lambda | App Lambda Lambda
@@ -90,7 +90,7 @@ parseVar :: Parser Lambda
 parseVar = (Var . read) <$> some (satisfy isDigit)
 
 parseAbs :: Parser Lambda -> Parser Lambda
-parseAbs p = const Abs <$> satisfy (== 'λ') <*> p
+parseAbs p = const Abs <$> (satisfy (== 'λ') <|> satisfy (== '\\')) <*> p
 
 parseApp :: Parser Lambda
 parseApp = chainl (parens parseApp
@@ -148,7 +148,7 @@ intToLambda n
 lambdaToInt :: Lambda -> Maybe Int
 lambdaToInt (Abs (Abs a)) = depth a
     where depth x = case x of Var 1 -> Just 0
-                              App (Var 2) b -> fmap (+ 1) $ depth b
+                              App (Var 2) b -> (+ 1) <$> depth b
                               _ -> Nothing
 lambdaToInt _ = Nothing
 
