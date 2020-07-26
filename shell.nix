@@ -1,10 +1,10 @@
-{ pkgs ? import <nixpkgs> {} }:
+with (import <nixpkgs> {});
 
-with pkgs;
+let
+  lambda = haskellPackages.callPackage ./default.nix {};
 
-mkShell {
-  buildInputs = [
-    ghc
-    rlwrap
-  ];
-}
+in haskell.lib.addBuildTools lambda (with haskellPackages; [
+  cabal-install
+  rlwrap
+  ghcid
+])
