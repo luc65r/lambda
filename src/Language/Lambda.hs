@@ -15,12 +15,15 @@ instance Show Lambda where
     showsPrec n (App a b) = showParen (n > 10) $ showsPrec 10 a . showString " " . showsPrec 11 b
 
 
+-- | Perform one β-reduction
 reduct :: Lambda -> Lambda
 reduct (App (Abs a) b) = substitute a 1 b
 reduct (App a b) = App (reduct a) (reduct b)
 reduct (Abs a) = Abs $ reduct a
 reduct (Var a) = Var a
 
+-- | Reduct the lambda expression until it reducts to itself.
+--   reductMax ((λ 1 1) (λ 1 1)) will stop after the first reduction.
 reductMax :: Lambda -> Lambda
 reductMax x
     | x == y = x
@@ -42,12 +45,16 @@ incFreeVar (Var a) binders n
     | a > binders = Var $ a + n
     | otherwise = Var a
 
+-- | Determine if the lambda expression can be reducted.
+--   (λ 1 1) (λ 1 1) can be reducted, even though it reducts to itself.
 reductible :: Lambda -> Bool
 reductible (App (Abs _) _) = True
 reductible (App a b) = reductible a || reductible b
 reductible (Abs a) = reductible a
 reductible (Var _) = False
 
+-- | Reduct the lambda expression until it can't be reducted
+--   reductMax' ((λ 1 1) (λ 1 1)) won't stop
 reductMax' :: Lambda -> Lambda
 reductMax' = until (not . reductible) reduct
 

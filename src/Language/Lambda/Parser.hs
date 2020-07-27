@@ -93,6 +93,8 @@ parseApp = chainl (parens parseApp
     <|> parseAbs (many space >> parseApp)
     <|> parseVar) (some space >> pure App)
 
+-- | Run the parser.
+--   Lambda is represented by λ or \.
 parse :: String -> Maybe Lambda
 parse s = case unP parseApp s of
             ([], a) -> a
