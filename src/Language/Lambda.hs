@@ -57,16 +57,3 @@ reductible (Var _) = False
 --   reductMax' ((λ 1 1) (λ 1 1)) won't stop
 reductMax' :: Lambda -> Lambda
 reductMax' = until (not . reductible) reduct
-
-intToLambda :: Int -> Maybe Lambda
-intToLambda n
-    | n < 0 = Nothing
-    | otherwise = Just (Abs (Abs a))
-    where a = iterate (App (Var 2)) (Var 1) !! n
-
-lambdaToInt :: Lambda -> Maybe Int
-lambdaToInt (Abs (Abs a)) = depth a
-    where depth x = case x of Var 1 -> Just 0
-                              App (Var 2) b -> (+ 1) <$> depth b
-                              _ -> Nothing
-lambdaToInt _ = Nothing
