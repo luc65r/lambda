@@ -1,5 +1,6 @@
 { mkDerivation
 , lib
+, hspec
 
 , wrapWithReadline ? true, makeWrapper, rlwrap
 }:
@@ -11,6 +12,8 @@ mkDerivation {
 
   isLibrary = true;
   isExecutable = true;
+
+  testHaskellDepends = [ hspec ];
 
   buildDepends = lib.optional wrapWithReadline [ makeWrapper ];
   postFixup = lib.optional wrapWithReadline ''
