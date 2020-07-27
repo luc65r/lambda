@@ -53,7 +53,7 @@ lambdaToInt (Abs (Abs a)) = depth a
                               _ -> Left "Lambda expression doesn't correspond to a Church numeral"
 lambdaToInt _ = Left "Lambda expression doesn't correspond to a Church numeral"
 
-succ', plus, mult, pow, pred' :: Either String Lambda
+succ', plus, mult, pow, pred', sub :: Either String Lambda
 
 succ' = reductMax <$> parse "λλλ 2 (3 2 1)"
 
