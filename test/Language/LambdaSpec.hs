@@ -28,7 +28,7 @@ spec = do
             (do p <- plus
                 o <- intToLambda 1
                 lambdaToInt . reductMax $ App (App p o) o)
-                `shouldBe` Just 2
+                `shouldBe` Right 2
 
         it "4^2 - 2 * 4 should be 8" $ do
             (do p <- pow
@@ -37,23 +37,23 @@ spec = do
                 t <- intToLambda 2
                 f <- intToLambda 4
                 lambdaToInt . reductMax $ App (App s (App (App p f) t)) (App (App m t) f))
-                `shouldBe` Just 8
+                `shouldBe` Right 8
 
 
-intToLambda :: Int -> Maybe Lambda
+intToLambda :: Int -> Either String Lambda
 intToLambda n
-    | n < 0 = Nothing
-    | otherwise = Just (Abs (Abs a))
+    | n < 0 = Left "Invalid number"
+    | otherwise = Right (Abs (Abs a))
     where a = iterate (App (Var 2)) (Var 1) !! n
 
-lambdaToInt :: Lambda -> Maybe Int
+lambdaToInt :: Lambda -> Either String Int
 lambdaToInt (Abs (Abs a)) = depth a
-    where depth x = case x of Var 1 -> Just 0
+    where depth x = case x of Var 1 -> Right 0
                               App (Var 2) b -> (+ 1) <$> depth b
-                              _ -> Nothing
-lambdaToInt _ = Nothing
+                              _ -> Left "Lambda expression doesn't correspond to a Church numeral"
+lambdaToInt _ = Left "Lambda expression doesn't correspond to a Church numeral"
 
-succ', plus, mult, pow, pred' :: Maybe Lambda
+succ', plus, mult, pow, pred' :: Either String Lambda
 
 succ' = reductMax <$> parse "λλλ 2 (3 2 1)"
 

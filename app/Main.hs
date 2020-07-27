@@ -12,8 +12,8 @@ repl = do
                       'q' -> exitSuccess
                       _ -> putStrLn "Invalid command" >> repl
       _ -> putStrLn (case reductMax <$> parse input of
-                       Just s -> show s
-                       Nothing -> "Invalid input") >> repl
+                       Right s -> show s
+                       Left s -> "Invalid input: " ++ s) >> repl
 
 main :: IO ()
 main = repl

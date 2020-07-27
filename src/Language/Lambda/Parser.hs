@@ -7,50 +7,50 @@ import Data.Char (isDigit)
 
 import Language.Lambda (Lambda(..))
 
-newtype Parser a = P { unP :: String -> (String, Maybe a) }
+newtype Parser a = P { unP :: String -> (String, Either String a) }
 
 instance Functor Parser where
     fmap f (P st) = P $ \s -> case st s of
-                                (r, Nothing) -> (r, Nothing)
-                                (r, Just a) -> (r, Just (f a))
+                                (r, Left a) -> (r, Left a)
+                                (r, Right a) -> (r, Right (f a))
 
 instance Applicative Parser where
-    pure a = P $ \s -> (s, Just a)
+    pure a = P $ \s -> (s, Right a)
 
     P ff <*> P xx = P $ \s0 -> case ff s0 of
-                                 (s1, Nothing) -> (s1, Nothing)
-                                 (s1, Just f) -> case xx s1 of
-                                                   (s2, Nothing) -> (s2, Nothing)
-                                                   (s2, Just x) -> (s2, Just (f x))
+                                 (s1, Left a) -> (s1, Left a)
+                                 (s1, Right f) -> case xx s1 of
+                                                   (s2, Left a) -> (s2, Left a)
+                                                   (s2, Right x) -> (s2, Right (f x))
 
 instance Alternative Parser where
-    empty = P $ \s -> (s, Nothing)
+    empty = P $ \s -> (s, Left "")
 
     (P f1) <|> (P f2) = P $ \s0 -> case f1 s0 of
-                                     (s1, Nothing) -> f2 s0
-                                     (s1, Just a) -> (s1, Just a)
+                                     (s1, Left _) -> f2 s0
+                                     (s1, Right a) -> (s1, Right a)
 
     many (P f) = P go where
         go s0 = case f s0 of
-                  (_, Nothing) -> (s0, Just [])
-                  (s1, Just a) -> case go s1 of
-                                    (s2, Nothing) -> (s2, Nothing)
-                                    (s2, Just as) -> (s2, Just (a:as))
+                  (_, Left _) -> (s0, Right [])
+                  (s1, Right a) -> case go s1 of
+                                    (s2, Left b) -> (s2, Left b)
+                                    (s2, Right as) -> (s2, Right (a:as))
 
     some (P f) = P $ \s0 -> case f s0 of
-                              (s1, Nothing) -> (s1, Nothing)
-                              (s1, Just a) ->
+                              (s1, Left a) -> (s1, Left a)
+                              (s1, Right a) ->
                                   let (P fm) = many (P f)
                                    in case fm s1 of
-                                        (s2, Nothing) -> (s2, Nothing)
-                                        (s2, Just as) -> (s2, Just (a:as))
+                                        (s2, Left b) -> (s2, Left b)
+                                        (s2, Right as) -> (s2, Right (a:as))
 
 instance Monad Parser where
     return = pure
 
     (P x) >>= f = P $ \s -> case x s of
-                              (r, Nothing) -> (r, Nothing)
-                              (r, Just a) ->
+                              (r, Left a) -> (r, Left a)
+                              (r, Right a) ->
                                   let P fm = f a
                                    in fm r
 
@@ -69,10 +69,10 @@ space = satisfy (== ' ')
 
 satisfy :: (Char -> Bool) -> Parser Char
 satisfy f = P $ \s -> case s of
-                        [] -> ([], Nothing)
+                        [] -> ([], Left "Unexpected end")
                         (c:cs)
-                            | f c -> (cs, Just c)
-                            | otherwise -> (cs, Nothing)
+                            | f c -> (cs, Right c)
+                            | otherwise -> (cs, Left "Don't satisfy")
 
 chainl :: Parser a -> Parser (a -> a -> a) -> Parser a
 chainl p op = p >>= rest
@@ -95,7 +95,8 @@ parseApp = chainl (parens parseApp
 
 -- | Run the parser.
 --   Lambda is represented by λ or \.
-parse :: String -> Maybe Lambda
+parse :: String -> Either String Lambda
 parse s = case unP parseApp s of
-            ([], a) -> a
-            _ -> Nothing
+            ([], Right a) -> Right a
+            (_, Left a) -> Left a
+            _ -> Left "Unmatched"
