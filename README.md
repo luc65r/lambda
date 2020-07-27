@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/luc65r/lambda.svg?branch=master)](https://travis-ci.org/luc65r/lambda)
+
 # lambda
 
 A De Bruijn indexed lambda calculus interpreter written in Haskell
