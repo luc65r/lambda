@@ -1,5 +1,5 @@
 {-# OPTIONS_GHC -Wno-unused-do-bind #-}
-{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE LambdaCase, TupleSections #-}
 
 module Language.Lambda.Parser
     ( parse
@@ -18,7 +18,7 @@ instance Functor Parser where
                                 (r, Right a) -> (r, Right (f a))
 
 instance Applicative Parser where
-    pure a = P $ \s -> (s, Right a)
+    pure a = P (, Right a)
 
     P ff <*> P xx = P $ \s0 -> case ff s0 of
                                  (s1, Left a) -> (s1, Left a)
@@ -27,7 +27,7 @@ instance Applicative Parser where
                                                    (s2, Right x) -> (s2, Right (f x))
 
 instance Alternative Parser where
-    empty = P $ \s -> (s, Left "")
+    empty = P (, Left "")
 
     (P f1) <|> (P f2) = P $ \s0 -> case f1 s0 of
                                      (_, Left _) -> f2 s0
@@ -89,7 +89,7 @@ parseVar :: Parser Lambda
 parseVar = Var . read <$> some (satisfy isDigit)
 
 parseAbs :: Parser Lambda -> Parser Lambda
-parseAbs p = const Abs <$> (satisfy (== 'λ') <|> satisfy (== '\\')) <*> p
+parseAbs p = Abs <$ (satisfy (== 'λ') <|> satisfy (== '\\')) <*> p
 
 parseApp :: Parser Lambda
 parseApp = chainl (parens parseApp
