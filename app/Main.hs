@@ -8,7 +8,7 @@ repl :: IO ()
 repl = do
     input <- putStr "λ> " >> hFlush stdout >> getLine
     case input of
-      (':':c:cs) -> case c of
+      (':':c:_) -> case c of
                       'q' -> exitSuccess
                       _ -> putStrLn "Invalid command" >> repl
       _ -> putStrLn (case reductMax <$> parse input of

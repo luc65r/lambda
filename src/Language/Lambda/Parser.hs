@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -Wno-unused-do-bind #-}
 {-# LANGUAGE LambdaCase #-}
 
 module Language.Lambda.Parser
@@ -29,7 +30,7 @@ instance Alternative Parser where
     empty = P $ \s -> (s, Left "")
 
     (P f1) <|> (P f2) = P $ \s0 -> case f1 s0 of
-                                     (s1, Left _) -> f2 s0
+                                     (_, Left _) -> f2 s0
                                      (s1, Right a) -> (s1, Right a)
 
     many (P f) = P go where
