@@ -100,7 +100,7 @@ parseVar :: Parser Lambda
 parseVar = Var . read <$> some (satisfy isDigit)
 
 parseAbs :: Parser Lambda -> Parser Lambda
-parseAbs p = Abs <$ (satisfy (== 'λ') <|> satisfy (== '\\')) <*> p
+parseAbs p = Abs <$ satisfy (`elem` ['λ', '\\']) <*> p
 
 parseApp :: Parser Lambda
 parseApp = chainl (parens parseApp
