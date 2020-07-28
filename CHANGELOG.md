@@ -9,3 +9,13 @@
 
 * Error messages for the parser
 * Better tests
+
+
+## 0.3 -- 2020-07-29
+
+* Tests for the parser
+* New function: apps
+* CI
+* Linter
+* Better documentation
+* Better code
