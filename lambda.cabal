@@ -37,7 +37,7 @@ test-suite spec
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
-  other-modules:       Language.LambdaSpec
+  other-modules:       Language.LambdaSpec, Language.Lambda.ParserSpec
   build-depends:       base == 4.*, hspec == 2.*, lambda
   build-tool-depends:  hspec-discover:hspec-discover == 2.*
   ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N

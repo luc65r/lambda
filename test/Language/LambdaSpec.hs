@@ -1,6 +1,7 @@
 module Language.LambdaSpec (spec) where
 
 import Test.Hspec
+
 import Language.Lambda
 import Language.Lambda.Parser
 

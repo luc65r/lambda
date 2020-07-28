@@ -1,4 +1,4 @@
-* Better tests, particularly for the parser
+* Better tests
 * Make the parser accept leading and trailing spaces
 * Better errors
 * Benchmarks
