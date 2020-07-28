@@ -12,7 +12,7 @@ spec = do
 
         it "should reduct (λ 1 1) (λ 1 1) to (λ 1 1) (λ 1 1)" $ do
             reduct (App (Abs (App (Var 1) (Var 1))) (Abs (App (Var 1) (Var 1))))
-                `shouldBe` (App (Abs (App (Var 1) (Var 1))) (Abs (App (Var 1) (Var 1))))
+                `shouldBe` App (Abs (App (Var 1) (Var 1))) (Abs (App (Var 1) (Var 1)))
 
         it "should reduct (λ λ 3 2) 2 to λ 2 3" $ do
             reduct (App (Abs (Abs (App (Var 3) (Var 2)))) (Var 2))

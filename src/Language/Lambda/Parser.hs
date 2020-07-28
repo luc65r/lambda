@@ -83,7 +83,7 @@ chainl p op = p >>= rest
 
 
 parseVar :: Parser Lambda
-parseVar = (Var . read) <$> some (satisfy isDigit)
+parseVar = Var . read <$> some (satisfy isDigit)
 
 parseAbs :: Parser Lambda -> Parser Lambda
 parseAbs p = const Abs <$> (satisfy (== 'λ') <|> satisfy (== '\\')) <*> p
