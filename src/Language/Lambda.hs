@@ -1,3 +1,15 @@
+{- |
+Module      : Language.Lambda
+Copyright   : (c) Lucas Ransan, 2020
+License     : MIT
+Maintainer  : lucas@ransan.tk
+Stability   : stable
+Portability : portable
+
+Definition of the type 'Lambda', which represents lambda terms using De Bruijn indices,
+and definition of the functions to perform a β-reduction.
+-}
+
 module Language.Lambda
     ( Lambda(..)
     , reduct
@@ -6,7 +18,16 @@ module Language.Lambda
     , reductMax'
     ) where
 
-data Lambda = Var Int | Abs Lambda | App Lambda Lambda
+-- | A lambda term can be:
+data Lambda
+    -- | A variable, represented by an integer;
+    = Var Int
+    -- | An abstaction (λ M), its body extends as far right as possible,
+    --   so λ λ M means λ (λ M);
+    | Abs Lambda
+    -- | An application (M N), which is left-associative,
+    --   so M N O means (M N) O.
+    | App Lambda Lambda
     deriving (Eq, Read)
 
 instance Show Lambda where

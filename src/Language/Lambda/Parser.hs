@@ -1,3 +1,14 @@
+{- |
+Module      : Language.Lambda.Parser
+Copyright   : (c) Lucas Ransan, 2020
+License     : MIT
+Maintainer  : lucas@ransan.tk
+Stability   : stable
+Portability : portable
+
+Definition of the function 'parse', which parses a lambda expression from a string.
+-}
+
 {-# OPTIONS_GHC -Wno-unused-do-bind #-}
 {-# LANGUAGE LambdaCase, TupleSections #-}
 
@@ -97,7 +108,8 @@ parseApp = chainl (parens parseApp
     <|> parseVar) (some space >> pure App)
 
 -- | Run the parser.
---   Lambda is represented by λ or \.
+--   Lambda can be represented by λ or \.
+--   The parser accepts extra parentheses and spaces.
 parse :: String -> Either String Lambda
 parse s = case unP parseApp s of
             ([], Right a) -> Right a
