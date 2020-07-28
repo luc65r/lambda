@@ -6,6 +6,17 @@ import Language.Lambda.Parser
 
 spec :: Spec
 spec = do
+    describe "apps" $ do
+        it "should just work" $ do
+            apps [Var 5] `shouldBe` Var 5
+            apps [Var 2, Var 26] `shouldBe` App (Var 2) (Var 26)
+            apps [Var 8, Var 7, Var 6, Var 5]
+                `shouldBe` App (App (App (Var 8) (Var 7)) (Var 6)) (Var 5)
+            apps [ Abs (Abs (apps [Var 4, Var 2, Abs (apps [Var 1, Var 3])]))
+                 , Abs (apps [Var 5, Var 1])]
+                `shouldBe` App (Abs (Abs (App (App (Var 4) (Var 2)) (Abs (App (Var 1) (Var 3))))))
+                               (Abs (App (Var 5) (Var 1)))
+
     describe "reduct" $ do
         it "should reduct (λ 1) 1 to 1" $ do
             reduct (App (Abs (Var 1)) (Var 1)) `shouldBe` Var 1

@@ -12,6 +12,7 @@ and definition of the functions to perform a β-reduction.
 
 module Language.Lambda
     ( Lambda(..)
+    , apps
     , reduct
     , reductible
     , reductMax
@@ -35,6 +36,10 @@ instance Show Lambda where
     showsPrec n (Abs a) = showParen (n > 9) $ showString "λ " . showsPrec 9 a
     showsPrec n (App a b) = showParen (n > 10) $ showsPrec 10 a . showString " " . showsPrec 11 b
 
+
+-- | Chain multiple 'App'
+apps :: [Lambda] -> Lambda
+apps = foldl1 App
 
 -- | Perform one β-reduction
 reduct :: Lambda -> Lambda
