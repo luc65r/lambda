@@ -1,3 +1,5 @@
+{-# LANGUAGE LambdaCase #-}
+
 module Language.Lambda.Parser
     ( parse
     ) where
@@ -68,11 +70,11 @@ space :: Parser Char
 space = satisfy (== ' ')
 
 satisfy :: (Char -> Bool) -> Parser Char
-satisfy f = P $ \s -> case s of
-                        [] -> ([], Left "Unexpected end")
-                        (c:cs)
-                            | f c -> (cs, Right c)
-                            | otherwise -> (cs, Left "Don't satisfy")
+satisfy f = P $ \case
+                   [] -> ([], Left "Unexpected end")
+                   (c:cs)
+                       | f c -> (cs, Right c)
+                       | otherwise -> (cs, Left "Don't satisfy")
 
 chainl :: Parser a -> Parser (a -> a -> a) -> Parser a
 chainl p op = p >>= rest
