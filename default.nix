@@ -2,6 +2,7 @@
 , lib
 , hspec
 , hlint-test
+, megaparsec
 
 , wrapWithReadline ? true, makeWrapper, rlwrap
 }:
@@ -13,6 +14,8 @@ mkDerivation {
 
   isLibrary = true;
   isExecutable = true;
+
+  libraryHaskellDepends = [ megaparsec ];
 
   testHaskellDepends = [ hspec hlint-test ];
 
