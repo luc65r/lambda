@@ -25,7 +25,7 @@ library
 
 executable lambda
   main-is:             Main.hs
-  -- other-modules:
+  other-modules:       Paths_lambda
   -- other-extensions:
   build-depends:       base == 4.*, lambda
   hs-source-dirs:      app

@@ -1,5 +1,7 @@
 import System.IO
 import System.Exit
+import Paths_lambda (version)
+import Data.Version (showVersion)
 
 import Language.Lambda
 import Language.Lambda.Parser
@@ -27,4 +29,5 @@ help = unlines
     ]
 
 main :: IO ()
-main = putStrLn "lambda 0.3   :? for help" >> repl
+main = putStrLn message >> repl
+    where message = "lambda " ++ showVersion version ++ "   :? for help"
