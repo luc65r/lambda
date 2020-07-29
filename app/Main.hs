@@ -27,4 +27,4 @@ help = unlines
     ]
 
 main :: IO ()
-main = repl
+main = putStrLn "lambda 0.3   :? for help" >> repl
