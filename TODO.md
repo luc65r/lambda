@@ -1,6 +1,6 @@
 * Better tests
 * Make the parser accept leading and trailing spaces
-* Better errors
+* Reject Var 0
 * Benchmarks
 * Bound expressions to names so one could do `+ _1 _2`
 * Better REPL
