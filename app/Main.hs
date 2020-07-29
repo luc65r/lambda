@@ -14,8 +14,8 @@ repl = do
           | otherwise -> putStrLn "Invalid command" >> repl
 
       _ -> putStrLn (case reductMax <$> parse input of
-                       Right s -> show s
-                       Left s -> "Invalid input: " ++ s) >> repl
+                       Right s -> show s ++ "\n"
+                       Left s -> s) >> repl
 
 help :: String
 help = unlines
