@@ -9,7 +9,7 @@
 
 mkDerivation {
   pname = "lambda";
-  version = "0.3";
+  version = "0.4";
   src = ./.;
 
   isLibrary = true;

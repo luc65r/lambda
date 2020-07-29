@@ -19,3 +19,11 @@
 * Linter
 * Better documentation
 * Better code
+
+
+## 0.4 -- 2020-07-29
+
+* It now uses Megaparsec!
+* New function: parseLambda
+* Better REPL
+* Better parsing error messages thanks to Megaparsec
