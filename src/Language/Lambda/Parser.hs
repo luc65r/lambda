@@ -61,7 +61,11 @@ parseTerm = M.choice
     ]
 
 parseVar :: Parser Lambda
-parseVar = Var <$> lexeme L.decimal
+parseVar = do
+    n <- lexeme L.decimal
+    if n > 0
+       then pure $ Var n
+       else fail "variable can't be 0"
 
 parseAbs :: Parser Lambda
 parseAbs = Abs <$> ((symbol "λ" <|> symbol "\\") *> parseExpr)

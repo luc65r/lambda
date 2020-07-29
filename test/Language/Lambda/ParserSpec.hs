@@ -59,4 +59,10 @@ spec = do
             parse "(5))" `shouldSatisfy` isLeft
             parse "( (λ 9 )" `shouldSatisfy` isLeft
             parse "((  (( ((((1" `shouldSatisfy` isLeft
-            parse "(((1)) ((\\ 72 )) 2))" `shouldSatisfy` isLeft
+            parse "  (((1)) ((\\ 72 )) 2) )   " `shouldSatisfy` isLeft
+
+        it "should not allow a variable to be 0" $ do
+            parse "0" `shouldSatisfy` isLeft
+            parse " 0 6  " `shouldSatisfy` isLeft
+            parse "7 0000  4" `shouldSatisfy` isLeft
+            parse "(λ λ 4 0 (λ 1 3)) (λ ((0)) 1)" `shouldSatisfy` isLeft
