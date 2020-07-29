@@ -21,7 +21,7 @@ library
   build-depends:       base == 4.*
   hs-source-dirs:      src
   default-language:    Haskell2010
-  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:         -Wall -Werror -threaded -rtsopts -with-rtsopts=-N
 
 executable lambda
   main-is:             Main.hs
@@ -30,7 +30,7 @@ executable lambda
   build-depends:       base == 4.*, lambda
   hs-source-dirs:      app
   default-language:    Haskell2010
-  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:         -Wall -Werror -threaded -rtsopts -with-rtsopts=-N
 
 test-suite spec
   default-language:    Haskell2010
@@ -40,7 +40,7 @@ test-suite spec
   other-modules:       Language.LambdaSpec, Language.Lambda.ParserSpec
   build-depends:       base == 4.*, hspec == 2.*, lambda
   build-tool-depends:  hspec-discover:hspec-discover == 2.*
-  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:         -Wall -Werror -threaded -rtsopts -with-rtsopts=-N
 
 test-suite hlint
   default-language:    Haskell2010
@@ -48,4 +48,4 @@ test-suite hlint
   hs-source-dirs:      lint
   main-is:             HLint.hs
   build-depends:       base == 4.*, hlint-test
-  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:         -Wall -Werror -threaded -rtsopts -with-rtsopts=-N
