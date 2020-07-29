@@ -74,7 +74,7 @@ parseApp = chainl1 parseTerm $ pure App
 --   The parser accepts extra parentheses and spaces.
 --   You will need to import 'Text.Megaparsec' to deal with the errors.
 parseLambda :: String -> Either (M.ParseErrorBundle String Void) Lambda
-parseLambda = M.parse (parseExpr <* M.eof) ""
+parseLambda = M.parse (sc *> parseExpr <* M.eof) ""
 
 -- | Run the parser.
 --   The errors are transformed to 'String' for you,
