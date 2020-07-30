@@ -10,8 +10,6 @@ Definition of the functions 'parse' and 'parseLambda',
 which parse a lambda expression from a string.
 -}
 
-{-# OPTIONS_GHC -Wno-unused-do-bind #-}
-
 module Language.Lambda.Parser
     ( parseLambda
     , parse
