@@ -23,7 +23,7 @@ mkDerivation {
   buildDepends = lib.optional wrapWithReadline [ makeWrapper ];
   postFixup = lib.optional wrapWithReadline ''
     makeWrapper ${rlwrap}/bin/rlwrap $out/bin/rlambda \
-        --add-flags "$out/bin/lambda"
+        --add-flags "$out/bin/lambda repl"
   '';
 
   homepage = "https://github.com/luc65r/lambda#readme";

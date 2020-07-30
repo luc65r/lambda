@@ -1,5 +1,6 @@
 import System.IO
 import System.Exit
+import System.Environment
 import Paths_lambda (version)
 import Data.Version (showVersion)
 import Data.List.NonEmpty (NonEmpty((:|)))
@@ -44,5 +45,9 @@ help = unlines
     ]
 
 main :: IO ()
-main = putStrLn message >> repl
-    where message = "lambda " ++ showVersion version ++ "   :? for help"
+main = do
+    let message = "lambda " ++ showVersion version ++ "   :? for help"
+    args <- getArgs
+    case args of
+      ("repl":_) -> putStrLn message >> repl
+      _ -> getContents >>= putStrLn . either errorBundlePretty (show . reductMax) . parseLambda
