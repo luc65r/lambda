@@ -27,3 +27,10 @@
 * New function: parseLambda
 * Better REPL
 * Better parsing error messages thanks to Megaparsec
+
+
+## 0.5 -- 2020-07-30
+
+* REPL moved to `lambda repl` or `rlambda`
+* `lambda` now parses and reduct stdin, so you can do `lambda < expr.lambda`
+* The REPL now will ask for more input if there are parentheses open
