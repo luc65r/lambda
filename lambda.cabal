@@ -27,7 +27,7 @@ executable lambda
   main-is:             Main.hs
   other-modules:       Paths_lambda
   -- other-extensions:
-  build-depends:       base == 4.*, lambda
+  build-depends:       base == 4.*, lambda, megaparsec == 8.*
   hs-source-dirs:      app
   default-language:    Haskell2010
   ghc-options:         -Wall -Werror -threaded -rtsopts -with-rtsopts=-N

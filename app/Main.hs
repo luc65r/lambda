@@ -2,6 +2,9 @@ import System.IO
 import System.Exit
 import Paths_lambda (version)
 import Data.Version (showVersion)
+import Data.List.NonEmpty (NonEmpty((:|)))
+import Data.Void
+import Text.Megaparsec.Error
 
 import Language.Lambda
 import Language.Lambda.Parser
@@ -15,9 +18,21 @@ repl = do
           | c `elem` ['?', 'h'] -> putStrLn help >> repl
           | otherwise -> putStrLn "Invalid command" >> repl
 
-      _ -> putStrLn (case reductMax <$> parse input of
-                       Right s -> show s ++ "\n"
-                       Left s -> s) >> repl
+      _ -> multiline input >>= putStrLn . either
+             errorBundlePretty
+             ((++ "\n") . show . reductMax) . parseLambda
+           >> repl
+
+finished :: Either (ParseErrorBundle String Void) Lambda -> Bool
+finished (Left ParseErrorBundle
+    { bundleErrors = (TrivialError _ (Just EndOfInput) _) :| _
+    }) = False
+finished _ = True
+
+multiline :: String -> IO String
+multiline s
+    | finished (parseLambda s) = pure s
+    | otherwise = (s ++) . ('\n' :) <$> ((putStr " > " >> hFlush stdout >> getLine) >>= multiline)
 
 help :: String
 help = unlines
