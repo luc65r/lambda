@@ -3,7 +3,7 @@ Module      : Language.Lambda
 Copyright   : (c) Lucas Ransan, 2020
 License     : MIT
 Maintainer  : lucas@ransan.tk
-Stability   : stable
+Stability   : experimental
 Portability : portable
 
 Definition of the type 'Lambda', which represents lambda terms using De Bruijn indices,

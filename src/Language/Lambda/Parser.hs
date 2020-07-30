@@ -3,7 +3,7 @@ Module      : Language.Lambda.Parser
 Copyright   : (c) Lucas Ransan, 2020
 License     : MIT
 Maintainer  : lucas@ransan.tk
-Stability   : stable
+Stability   : experimental
 Portability : portable
 
 Definition of the functions 'parse' and 'parseLambda',
