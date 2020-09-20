@@ -1,4 +1,4 @@
-with (import <nixpkgs> {});
+with import <nixpkgs> {};
 
 let
   lambda = haskellPackages.callPackage ./default.nix {};
