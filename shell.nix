@@ -5,7 +5,6 @@ let
 
 in (haskell.lib.addBuildTools lambda (with haskellPackages; [
   cabal-install
-  rlwrap
   ghcid
   hlint
 ])).env

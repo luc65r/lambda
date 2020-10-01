@@ -33,9 +33,6 @@ which is `λ λ 2 (2 (2 (2 (2 (2 (2 (2 (2 (2 (2 (2 (2 (2 (2 (2 (2 (2 (2 (2 (2 (2
 You can also launch a simple REPL with `lambda repl`.
 `:q` quits the REPL.
 
-It is recommended to wrap the REPL with `rlwrap` to provide history.
-If you used the `default.nix`, the wrap is provided under the name `rlambda`.
-
 
 ## Why De Bruijn indices?
 
