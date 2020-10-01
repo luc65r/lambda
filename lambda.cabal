@@ -48,4 +48,5 @@ test-suite hlint
   hs-source-dirs:      lint
   main-is:             HLint.hs
   build-depends:       base == 4.*, hlint-test
+  build-tool-depends:  hlint-test:hlint-test
   ghc-options:         -Wall -Werror -threaded -rtsopts -with-rtsopts=-N
