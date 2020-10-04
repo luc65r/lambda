@@ -3,6 +3,7 @@
 , hspec
 , hlint-test
 , megaparsec
+, haskeline
 }:
 
 mkDerivation {
@@ -13,7 +14,7 @@ mkDerivation {
   isLibrary = true;
   isExecutable = true;
 
-  executableHaskellDepends = [ megaparsec ];
+  executableHaskellDepends = [ megaparsec haskeline ];
   libraryHaskellDepends = [ megaparsec ];
 
   testHaskellDepends = [ hspec hlint-test ];
