@@ -10,22 +10,24 @@ import Language.Lambda
 import Language.Lambda.Parser
 
 repl :: IO ()
-repl = runInputT defaultSettings loop
+repl = runInputT defaultSettings $ withInterrupt loop
     where
         loop :: InputT IO ()
         loop = do
-            minput <- getInputLine "λ> "
+            minput <- handleInterrupt (return (Just "")) $ getInputLine "λ> "
             case minput of
               Nothing -> return ()
+              Just "" -> loop
 
               Just (':':c:_)
                 | c == 'q' -> return ()
                 | c `elem` ['?', 'h'] -> outputStrLn help >> loop
                 | otherwise -> outputStrLn "Invalid command" >> loop
 
-              Just input -> multiline input >>= outputStrLn . either
-                errorBundlePretty
-                (show . reductMax) . parseLambda >> loop
+              Just input -> handleInterrupt (return ())
+                (multiline input >>= outputStrLn . either
+                    errorBundlePretty
+                    (show . reductMax) . parseLambda) >> loop
 
 finished :: Either (ParseErrorBundle String Void) Lambda -> Bool
 finished (Left ParseErrorBundle
@@ -36,7 +38,7 @@ finished _ = True
 multiline :: String -> InputT IO String
 multiline s
     | finished (parseLambda s) = pure s
-    | otherwise = ((getInputLine " > ") >>= (multiline . (s ++) . ('\n' :) . mte))
+    | otherwise = getInputLine " > " >>= (multiline . (s ++) . ('\n' :) . mte)
     where mte Nothing = ""
           mte (Just a) = a
 
