@@ -1,28 +1,31 @@
-import System.IO
-import System.Exit
 import System.Environment
 import Paths_lambda (version)
 import Data.Version (showVersion)
 import Data.List.NonEmpty (NonEmpty((:|)))
 import Data.Void
 import Text.Megaparsec.Error
+import System.Console.Haskeline
 
 import Language.Lambda
 import Language.Lambda.Parser
 
 repl :: IO ()
-repl = do
-    input <- putStr "λ> " >> hFlush stdout >> getLine
-    case input of
-      (':':c:_)
-          | c == 'q' -> exitSuccess
-          | c `elem` ['?', 'h'] -> putStrLn help >> repl
-          | otherwise -> putStrLn "Invalid command" >> repl
+repl = runInputT defaultSettings loop
+    where
+        loop :: InputT IO ()
+        loop = do
+            minput <- getInputLine "λ> "
+            case minput of
+              Nothing -> return ()
 
-      _ -> multiline input >>= putStrLn . either
-             errorBundlePretty
-             ((++ "\n") . show . reductMax) . parseLambda
-           >> repl
+              Just (':':c:_)
+                | c == 'q' -> return ()
+                | c `elem` ['?', 'h'] -> outputStrLn help >> loop
+                | otherwise -> outputStrLn "Invalid command" >> loop
+
+              Just input -> multiline input >>= outputStrLn . either
+                errorBundlePretty
+                (show . reductMax) . parseLambda >> loop
 
 finished :: Either (ParseErrorBundle String Void) Lambda -> Bool
 finished (Left ParseErrorBundle
@@ -30,10 +33,12 @@ finished (Left ParseErrorBundle
     }) = False
 finished _ = True
 
-multiline :: String -> IO String
+multiline :: String -> InputT IO String
 multiline s
     | finished (parseLambda s) = pure s
-    | otherwise = (s ++) . ('\n' :) <$> ((putStr " > " >> hFlush stdout >> getLine) >>= multiline)
+    | otherwise = ((getInputLine " > ") >>= (multiline . (s ++) . ('\n' :) . mte))
+    where mte Nothing = ""
+          mte (Just a) = a
 
 help :: String
 help = unlines
