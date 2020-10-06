@@ -1,7 +1,7 @@
 cabal-version:       >=1.10
 
 name:                lambda
-version:             0.5
+version:             0.6
 synopsis:            A De Bruijn indexed lambda calculus interpreter
 description:         See README.md
 home-page:           https://github.com/luc65r/lambda#readme
